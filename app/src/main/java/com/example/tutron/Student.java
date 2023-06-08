@@ -1,6 +1,8 @@
 package com.example.tutron;
 
-public class Student {
+import java.io.Serializable;
+
+public class Student implements Serializable {
 
     private Integer UUID;
 
@@ -10,12 +12,12 @@ public class Student {
 
     private String cvv;
 
-    private Integer ExpMonth;
+    private String ExpMonth;
 
-    private Integer ExpYear;
+    private String ExpYear;
 
-    public Student(Integer UUID, String address, String cardNumber, String cvv, Integer expMonth, Integer expYear) {
-        this.UUID = UUID;
+    public Student(String address, String cardNumber, String cvv, String expMonth, String expYear) {
+
         Address = address;
         CardNumber = cardNumber;
         this.cvv = cvv;
@@ -55,19 +57,19 @@ public class Student {
         this.cvv = cvv;
     }
 
-    public Integer getExpMonth() {
+    public String getExpMonth() {
         return ExpMonth;
     }
 
-    public void setExpMonth(Integer expMonth) {
+    public void setExpMonth(String expMonth) {
         ExpMonth = expMonth;
     }
 
-    public Integer getExpYear() {
+    public String getExpYear() {
         return ExpYear;
     }
 
-    public void setExpYear(Integer expYear) {
+    public void setExpYear(String expYear) {
         ExpYear = expYear;
     }
 }

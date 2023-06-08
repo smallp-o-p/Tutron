@@ -2,6 +2,10 @@ package com.example.tutron;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,12 +32,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class register_screen extends AppCompatActivity {
+
+    private ActivityResultLauncher<Intent> launcher;
     private TextInputEditText EmailAddr, Pwd, ConfirmPwd;
     private Button RegisterBtn;
     private FirebaseAuth mAuth;
     private RadioButton studentRadio, tutorRadio;
 
-    FirebaseFirestore db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +57,6 @@ public class register_screen extends AppCompatActivity {
         studentRadio = findViewById(R.id.studentRadio);
 
         tutorRadio = findViewById(R.id.tutorRadio);
-
-        db = FirebaseFirestore.getInstance();
 
         RegisterBtn.setOnClickListener(v -> {
 
@@ -94,53 +98,19 @@ public class register_screen extends AppCompatActivity {
 
             Log.d("STATE", "Validation passed.");
 
-            mAuth = FirebaseAuth.getInstance();
-
-            Log.d("STATE", "mAuth created");
-
-            if(mAuth.getCurrentUser() != null){
-                Log.d("STATE", mAuth.getCurrentUser().getUid());
-
-                mAuth.signOut(); // the most recently created user is remembered by mAuth, have no idea why
-            }
-            /* Move this elsewhere, this is a decent demo of how it functions */
-            mAuth.createUserWithEmailAndPassword(email, password) // the register process, user is automatically logged in
-                    .addOnCompleteListener(register_screen.this, task -> {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "createUserWithEmail:success");
-                            GoToNext();
-                        }
-                        else{
-                            Log.d("STATE", "user create failed");
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(register_screen.this,
-                                    "fail :(",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            GoToNext(email, password);
         });
     }
     /*Stores details in Firestore */
     /**TODO: bring user to the extra details they need to fill out to finally register, then actually register them there.  */
-    public void GoToNext(){
+    public void GoToNext(String email, String password){
 
-        FirebaseUser user = mAuth.getCurrentUser();
-        Map<String, Object> data = new HashMap<>();
-
-        String uuid = user.getUid();
-        String email = user.getEmail();
-
-        String type;
-        data.put("Email", user.getEmail());
         if(studentRadio.isChecked()){
-            type = "Student";
-            data.put("Type", type);
+            Intent intent = new Intent(register_screen.this, student_register.class);
+            intent.putExtra("email", email);
+            intent.putExtra("password", password);
+            startActivity(intent);
         }
-        else{
-            type = "Tutor";
-            data.put("Type", type);
-        }
-        db.collection("Users").document(uuid).set(data);
     }
 
 }
