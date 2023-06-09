@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Tutron</string>
+    <string name="login_text">Welcome to Tutron! Please sign in with the form below, or register an account if you don\'t have one yet!</string>
+    <string name="tutron">Tutron</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="login_hint">Login...</string>
+    <string name="login_btn">Login</string>
+    <string name="or">Or...</string>
+    <string name="register">Register</string>
+    <string name="make_acct">Make your account!</string>
+    <string name="confirmpwd">Confirm Password</string>
+    <string name="student">Student</string>
+    <string name="tutor">Tutor</string>
 </resources>
