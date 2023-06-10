@@ -12,4 +12,5 @@
     <string name="confirmpwd">Confirm Password</string>
     <string name="student">Student</string>
     <string name="tutor">Tutor</string>
+    <string name="logout">Logout</string>
 </resources>
