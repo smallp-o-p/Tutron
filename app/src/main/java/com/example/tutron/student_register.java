@@ -67,17 +67,26 @@ public class student_register extends AppCompatActivity {
 
             mAuth = FirebaseAuth.getInstance();
 
-            Student newStudent = new Student(address_, creditnum_, cvv2, expm2, expy2);
+            Student newStudent = new Student(extras.getString("firstname"), extras.getString("lastname"), address_, creditnum_, cvv2, expm2, expy2);
 
             mAuth.createUserWithEmailAndPassword(extras.getString("email"), extras.getString("password"))
                     .addOnCompleteListener(this, task -> {
-                       Log.d(TAG, "createUserWithEmail:success");
-                       GoToNext(newStudent);
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            GoToNext(newStudent);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent returntomain = new Intent(student_register.this, login_screen.class);
+                            startActivity(returntomain);
+                        }
                     });
-
         });
     }
-    public void GoToNext(Student student ){
+    public void GoToNext(Student student){
 
         Map<String, Object> ouruser = new HashMap<>();
         ouruser.put("Email", extras.getString("email"));

@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class Student implements Serializable {
 
-    private Integer UUID;
+    private String FirstName;
+
+    private String LastName;
 
     private String Address;
 
@@ -16,8 +18,9 @@ public class Student implements Serializable {
 
     private String ExpYear;
 
-    public Student(String address, String cardNumber, String cvv, String expMonth, String expYear) {
-
+    public Student(String firstName, String lastName, String address, String cardNumber, String cvv, String expMonth, String expYear) {
+        FirstName = firstName;
+        LastName = lastName;
         Address = address;
         CardNumber = cardNumber;
         this.cvv = cvv;
@@ -25,12 +28,20 @@ public class Student implements Serializable {
         ExpYear = expYear;
     }
 
-    public Integer getUUID() {
-        return UUID;
+    public String getFirstName() {
+        return FirstName;
     }
 
-    public void setUUID(Integer UUID) {
-        this.UUID = UUID;
+    public void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
     }
 
     public String getAddress() {

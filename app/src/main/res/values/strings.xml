@@ -13,4 +13,33 @@
     <string name="student">Student</string>
     <string name="tutor">Tutor</string>
     <string name="logout">Logout</string>
+    <string name="describe_yourself">Describe yourself!</string>
+    <string name="submit">Submit</string>
+    <string name="native_language">Native Language</string>
+    <string name="education_level">Education Level</string>
+    <string name="additional_information">Additional Information</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="choose_your_role">Choose your role:</string>
+    <string name="exp_year">Exp Year</string>
+    <string name="exp_month">Exp Month</string>
+    <string name="cvv">CVV</string>
+    <string name="credit_card_number">Credit Card Number</string>
+    <string name="address">Address</string>
+    <string name="registration">Registration</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+
+
+    <string-array name="education_levels">
+        <item>Secondary</item>
+        <item>Post-Secondary Undergraduate</item>
+        <item>Post-Secondary Graduate+</item>
+    </string-array>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>French</item>
+    </string-array>
+
 </resources>

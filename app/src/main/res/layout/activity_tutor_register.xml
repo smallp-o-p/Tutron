@@ -4,29 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:gravity="center"
-    tools:context=".student_register">
+    tools:context=".tutor_register">
+
 
     <TextView
-        android:id="@+id/details_student_register"
+        android:id="@+id/details_tutor_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="10dp"
         android:text="@string/additional_information"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/tutor_form"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/details_tutor_register"
+        app:layout_constraintVertical_bias="0.323"
+        android:contentDescription="@string/profile_picture">
+    </ImageButton>
+
     <LinearLayout
-        android:id="@+id/form"
+        android:id="@+id/tutor_form"
         android:layout_width="300dp"
         android:layout_height="370dp"
         android:orientation="vertical"
@@ -40,80 +51,59 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/address_form"
+            android:layout_marginBottom="10dp"/>
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/address" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/education_level">
+
+            </TextView>
+            <Spinner
+                android:id="@+id/education_level"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp">
+            </Spinner>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/native_language">
+
+            </TextView>
+            <Spinner
+                android:id="@+id/native_lang"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                >
+            </Spinner>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginBottom="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/credit_form"
+                android:id="@+id/tutor_profile_desc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/credit_card_number" />
-
+                android:layout_height="match_parent"
+                android:hint="@string/describe_yourself" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/cvv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/cvv" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/expm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/exp_month"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/expy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/exp_year"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
     </LinearLayout>
 
     <Button
-        android:id="@+id/submit"
+        android:id="@+id/submit_tutor"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#125379"
         android:text="@string/submit"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.479"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.848"
-        android:backgroundTint="#125379"/>
+        app:layout_constraintVertical_bias="0.889" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
