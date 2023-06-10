@@ -9,12 +9,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -36,11 +38,14 @@ public class register_screen extends AppCompatActivity {
     private ActivityResultLauncher<Intent> launcher;
     private TextInputEditText EmailAddr, Pwd, ConfirmPwd;
     private Button RegisterBtn;
+
+    private ImageButton BackBtn;
     private FirebaseAuth mAuth;
     private RadioButton studentRadio, tutorRadio;
 
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +59,16 @@ public class register_screen extends AppCompatActivity {
 
         RegisterBtn =findViewById(R.id.registerbtn);
 
+        BackBtn = findViewById(R.id.back_arrow);
+
         studentRadio = findViewById(R.id.studentRadio);
 
         tutorRadio = findViewById(R.id.tutorRadio);
+
+        BackBtn.setOnClickListener(v -> {
+            Intent i = new Intent(register_screen.this, login_screen.class);
+            startActivity(i);
+        });
 
         RegisterBtn.setOnClickListener(v -> {
 
