@@ -15,11 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class tutor_register extends AppCompatActivity {
@@ -61,7 +61,7 @@ public class tutor_register extends AppCompatActivity {
             String lang = languagespinner.getSelectedItem().toString();
 
             if(TextUtils.isEmpty(desc)){
-                Toast.makeText(getApplicationContext(), "Profile description is empty.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Profile description required.", Toast.LENGTH_SHORT).show();
             }
 
             if(desc.trim().split("\\s+").length > 600){
@@ -91,8 +91,8 @@ public class tutor_register extends AppCompatActivity {
     public void GoToNext(Tutor tutor){
         Map<String, Object> ouruser = new HashMap<>();
         ouruser.put("Email", extras.getString("email"));
-        ouruser.put("Type", "Tutors");
-        db.collection("Users").document(mAuth.getCurrentUser().getUid()).set(ouruser);
+        ouruser.put("Type", "Tutor");
+        db.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).set(ouruser);
 
         db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).set(tutor);
 

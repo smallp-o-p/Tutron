@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class student_register extends AppCompatActivity {
     FirebaseFirestore db;
@@ -60,10 +61,32 @@ public class student_register extends AppCompatActivity {
 
             String cvv2 = String.valueOf(cvv.getText());
 
-            if(TextUtils.isEmpty(address_) || TextUtils.isEmpty(creditnum_) || TextUtils.isEmpty(expm2) || TextUtils.isEmpty(expy2)){
-                Toast.makeText(student_register.this, "missing field :(", Toast.LENGTH_SHORT).show();
+            if(TextUtils.isEmpty(address_)){
+                Toast.makeText(student_register.this, "Address Required", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if(TextUtils.isEmpty(creditnum_)){
+                Toast.makeText(student_register.this, "Credit Card Number Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(cvv2)){
+                Toast.makeText(student_register.this, "CVV Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(expm2)){
+                Toast.makeText(student_register.this, "Expiration Month Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(expy2)){
+                Toast.makeText(student_register.this, "Expiration Year Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(Integer.parseInt(expm2) > 12 || Integer.parseInt(expm2) < 0){
+                Toast.makeText(student_register.this, "Invalid Expiration Month", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
 
             mAuth = FirebaseAuth.getInstance();
 
@@ -91,7 +114,7 @@ public class student_register extends AppCompatActivity {
         Map<String, Object> ouruser = new HashMap<>();
         ouruser.put("Email", extras.getString("email"));
         ouruser.put("Type", "Student");
-        db.collection("Users").document(mAuth.getCurrentUser().getUid()).set(ouruser);
+        db.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).set(ouruser);
 
         db.collection("Students").document(mAuth.getCurrentUser().getUid()).set(student);
 
