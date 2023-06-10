@@ -2,30 +2,22 @@ package com.example.tutron;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.activity.result.ActivityResultCaller;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class student_register extends AppCompatActivity {
     FirebaseFirestore db;
@@ -63,38 +55,66 @@ public class student_register extends AppCompatActivity {
 
             String creditnum_ = String.valueOf(creditnum.getText());
 
-            String expm2 = String.valueOf(expm);
+            String expm2 = String.valueOf(expm.getText());
 
-            String expy2 = String.valueOf(expyear);
+            String expy2 = String.valueOf(expyear.getText());
 
-            String cvv2 = String.valueOf(cvv);
+            String cvv2 = String.valueOf(cvv.getText());
 
-            if(TextUtils.isEmpty(address_) || TextUtils.isEmpty(creditnum_) || TextUtils.isEmpty(expm2) || TextUtils.isEmpty(expy2)){
-                Toast.makeText(student_register.this, "missing field :(", Toast.LENGTH_SHORT).show();
+            if(TextUtils.isEmpty(address_)){
+                Toast.makeText(student_register.this, "Address Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(creditnum_)){
+                Toast.makeText(student_register.this, "Credit Card Number Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(cvv2)){
+                Toast.makeText(student_register.this, "CVV Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(expm2)){
+                Toast.makeText(student_register.this, "Expiration Month Required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(expy2)){
+                Toast.makeText(student_register.this, "Expiration Year Required", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            if(Integer.parseInt(expm2) > 12 || Integer.parseInt(expm2) < 0){
+                Toast.makeText(student_register.this, "Invalid Expiration Month", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             mAuth = FirebaseAuth.getInstance();
 
-            Student newStudent = new Student(address_, creditnum_, cvv2, expm2, expy2);
+            Student newStudent = new Student(extras.getString("firstname"), extras.getString("lastname"), address_, creditnum_, cvv2, expm2, expy2);
 
             mAuth.createUserWithEmailAndPassword(extras.getString("email"), extras.getString("password"))
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                           Log.d(TAG, "createUserWithEmail:success");
-                           GoToNext(newStudent);
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            GoToNext(newStudent);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent returntomain = new Intent(student_register.this, login_screen.class);
+                            startActivity(returntomain);
                         }
                     });
-
         });
     }
-    public void GoToNext(Student student ){
+    public void GoToNext(Student student){
 
         Map<String, Object> ouruser = new HashMap<>();
         ouruser.put("Email", extras.getString("email"));
         ouruser.put("Type", "Student");
-        db.collection("Users").document(mAuth.getCurrentUser().getUid()).set(ouruser);
+        db.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).set(ouruser);
 
         db.collection("Students").document(mAuth.getCurrentUser().getUid()).set(student);
 
