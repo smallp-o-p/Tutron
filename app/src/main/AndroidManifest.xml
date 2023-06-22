@@ -31,11 +31,11 @@
         <activity
             android:name=".register_screen"
             android:exported="false"
-            android:theme="@style/Theme.Material3.DayNight"></activity>
+            android:theme="@style/Theme.Material3.DayNight" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.DayNight"></activity>
+            android:theme="@style/Theme.Material3.DayNight" />
     </application>
 
 </manifest>
