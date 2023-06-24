@@ -119,7 +119,7 @@ public class student_register extends AppCompatActivity {
 
         Intent intent = new Intent(student_register.this, MainActivity.class);
         intent.putExtra("user", mAuth.getCurrentUser());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-
     }
 }

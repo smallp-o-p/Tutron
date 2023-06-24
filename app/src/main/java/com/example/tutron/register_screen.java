@@ -13,6 +13,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.jetbrains.annotations.TestOnly;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class register_screen extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> launcher;
@@ -87,6 +92,7 @@ public class register_screen extends AppCompatActivity {
                 Toast.makeText(register_screen.this,
                         "Missing email",
                         Toast.LENGTH_SHORT).show();
+                return;
             }
 
             if(funcs.ValidateEmail(email) == -2){

@@ -9,9 +9,12 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,13 +22,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class login_screen extends AppCompatActivity {
     Button Registerbtn, Loginbtn;
     TextInputEditText emailform, passwordform;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
-    Utils funcs = new Utils();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +122,12 @@ public class login_screen extends AppCompatActivity {
                         AlertDialog.Builder builder = new AlertDialog.Builder(login_screen.this);
                         Timestamp timestamp = document.getTimestamp("SuspendTime");
                         if(timestamp != null){
-
-                            builder.setMessage("You've been suspended until: " + funcs.FormattedDateBuilder(timestamp) + " (DD-MM-YYYY)");
+                            Date d = timestamp.toDate();
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(d);
+                            SimpleDateFormat formatted = new SimpleDateFormat("dd-MM-yyyy");
+                            formatted.setTimeZone(cal.getTimeZone());
+                            builder.setMessage("You've been suspended until: " + formatted.format(cal.getTime()) + " (DD-MM-YYYY)");
                             AlertDialog alert = builder.create();
                             alert.setTitle("Temporary Suspension Notice");
                             alert.show();

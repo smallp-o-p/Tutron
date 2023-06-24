@@ -54,8 +54,9 @@ public class Administrator extends AppCompatActivity {
             });
         }
         logout_btn.setOnClickListener(v -> {
-            mAuth.signOut();
-            finish();
+            Intent gotologin = new Intent(Administrator.this, login_screen.class);
+            gotologin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(gotologin);
         });
     }
     public void GenerateComplaints(){ // populate the complaintlistview

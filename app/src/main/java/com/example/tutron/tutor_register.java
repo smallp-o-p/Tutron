@@ -98,6 +98,7 @@ public class tutor_register extends AppCompatActivity {
         db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).update("Suspended", false);
         Intent intent = new Intent(tutor_register.this, MainActivity.class);
         intent.putExtra("user", mAuth.getCurrentUser());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 

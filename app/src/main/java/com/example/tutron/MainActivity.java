@@ -2,6 +2,7 @@ package com.example.tutron;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -52,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
         }
         logout.setOnClickListener(v -> {
             mAuth.signOut();
-            finish();
+            Intent gotologin = new Intent(MainActivity.this, login_screen.class);
+            gotologin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(gotologin);
         });
     }
 }

@@ -1,15 +1,10 @@
 package com.example.tutron;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.FirebaseFirestore;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public int ValidateEmail(String email) {
         if (email.isEmpty()) {
@@ -44,7 +39,6 @@ public class Utils {
         }
         return 0;
     }
-
     public int ValidatePass(String pass, String confirm) {
         if (pass.isEmpty() || confirm.isEmpty()) {
             return -1;
@@ -54,16 +48,4 @@ public class Utils {
         }
         return 0;
     }
-
-    public SimpleDateFormat FormattedDateBuilder(Timestamp timestamp){
-        Date d = timestamp.toDate();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        SimpleDateFormat formatted = new SimpleDateFormat("dd-MM-yyyy");
-        formatted.setTimeZone(cal.getTimeZone());
-        return formatted;
-    }
-
-
-
 }
