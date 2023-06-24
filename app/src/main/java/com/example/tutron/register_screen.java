@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
+
+import org.jetbrains.annotations.TestOnly;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class register_screen extends AppCompatActivity {
 
@@ -24,6 +26,8 @@ public class register_screen extends AppCompatActivity {
 
     private ImageButton BackBtn;
     private RadioButton studentRadio, tutorRadio;
+
+    private final Utils funcs = new Utils();
 
 
 
@@ -84,34 +88,34 @@ public class register_screen extends AppCompatActivity {
                 return;
             }
 
-            if(TextUtils.isEmpty(email)){
+            if(funcs.ValidateEmail(email) == -1){
                 Toast.makeText(register_screen.this,
                         "Missing email",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(TextUtils.isEmpty(password)){
+            if(funcs.ValidateEmail(email) == -2){
                 Toast.makeText(register_screen.this,
-                        "Missing password",
+                        "Invalid email.",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(TextUtils.isEmpty(confirm)){
-                Toast.makeText(register_screen.this,
-                        "Missing confirm",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
+            int passerr = funcs.ValidatePass(password, confirm);
 
-            if(!password.equals(confirm)){
-                Toast.makeText(register_screen.this,
-                        "Password and confirm not equal",
-                        Toast.LENGTH_SHORT).show();
-                return;
+            if(passerr != 0){
+                switch(passerr){
+                    case(-1):
+                        Toast.makeText(register_screen.this,
+                                "Missing field",
+                                Toast.LENGTH_SHORT).show();
+                    case(-2):
+                        Toast.makeText(register_screen.this,
+                                "Password and confirm not equal",
+                                Toast.LENGTH_SHORT).show();
+                }
             }
-
             Log.d("STATE", "Validation passed.");
 
             GoToNext(email, password, first, last);
@@ -139,5 +143,4 @@ public class register_screen extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
 }

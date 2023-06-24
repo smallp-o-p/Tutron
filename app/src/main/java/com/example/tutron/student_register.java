@@ -22,11 +22,10 @@ import java.util.Objects;
 public class student_register extends AppCompatActivity {
     FirebaseFirestore db;
     Button submitbtn;
-
     TextInputEditText address, creditnum, expm, expyear, cvv;
 
     FirebaseAuth mAuth;
-
+    Utils funcs = new Utils();
     Bundle extras;
 
     @Override
@@ -61,32 +60,32 @@ public class student_register extends AppCompatActivity {
 
             String cvv2 = String.valueOf(cvv.getText());
 
+            int crediterr = funcs.ValidatePaymentInfo(creditnum_, cvv2, expy2, expm2);
+
             if(TextUtils.isEmpty(address_)){
                 Toast.makeText(student_register.this, "Address Required", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(TextUtils.isEmpty(creditnum_)){
-                Toast.makeText(student_register.this, "Credit Card Number Required", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(TextUtils.isEmpty(cvv2)){
-                Toast.makeText(student_register.this, "CVV Required", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(TextUtils.isEmpty(expm2)){
-                Toast.makeText(student_register.this, "Expiration Month Required", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(TextUtils.isEmpty(expy2)){
-                Toast.makeText(student_register.this, "Expiration Year Required", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
-            if(Integer.parseInt(expm2) > 12 || Integer.parseInt(expm2) < 0){
-                Toast.makeText(student_register.this, "Invalid Expiration Month", Toast.LENGTH_SHORT).show();
-                return;
+            if(crediterr != 0){
+                switch(crediterr){
+                    case(-1):
+                        Toast.makeText(student_register.this, "Missing field", Toast.LENGTH_SHORT).show();
+                        return;
+                    case(-2):
+                        Toast.makeText(student_register.this, "Invalid Credit Card Number", Toast.LENGTH_SHORT).show();
+                        return;
+                    case(-3):
+                        Toast.makeText(student_register.this, "Invalid CVV", Toast.LENGTH_SHORT).show();
+                        return;
+                    case(-4):
+                        Toast.makeText(student_register.this, "Invalid Expiration Year", Toast.LENGTH_SHORT).show();
+                        return;
+                    case(-5):
+                        Toast.makeText(student_register.this, "Invalid Expiration Month", Toast.LENGTH_SHORT).show();
+                        return;
+                }
             }
-
 
             mAuth = FirebaseAuth.getInstance();
 
@@ -120,7 +119,7 @@ public class student_register extends AppCompatActivity {
 
         Intent intent = new Intent(student_register.this, MainActivity.class);
         intent.putExtra("user", mAuth.getCurrentUser());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-
     }
 }

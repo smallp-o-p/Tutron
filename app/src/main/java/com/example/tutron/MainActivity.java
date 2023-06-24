@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db;
     TextView main;
     Button logout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
         logout.setOnClickListener(v -> {
             mAuth.signOut();
-            Intent sendback = new Intent(MainActivity.this, login_screen.class);
-            startActivity(sendback);
+            Intent gotologin = new Intent(MainActivity.this, login_screen.class);
+            gotologin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(gotologin);
         });
     }
 }
