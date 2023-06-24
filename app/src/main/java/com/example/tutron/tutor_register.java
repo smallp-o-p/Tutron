@@ -95,11 +95,10 @@ public class tutor_register extends AppCompatActivity {
         db.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).set(ouruser);
 
         db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).set(tutor);
-
+        db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).update("Suspended", false);
         Intent intent = new Intent(tutor_register.this, MainActivity.class);
         intent.putExtra("user", mAuth.getCurrentUser());
         startActivity(intent);
-
     }
 
 

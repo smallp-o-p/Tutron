@@ -10,6 +10,7 @@ public class Tutor {
     private String Education;
     private String description;
     private Image pfp;
+    private boolean Suspended = false;
 
     public Tutor(String firstName, String lastName, String lang, String education, String description) {
         this.FirstName = firstName;
@@ -26,8 +27,9 @@ public class Tutor {
     public void setLastName(String lastName) {
         this.LastName = lastName;
     }
-
-
+    public void setSuspended(boolean yn){
+        this.Suspended = yn;
+    }
     public void setLang(String lang) {
         this.lang = lang;
     }
@@ -67,4 +69,5 @@ public class Tutor {
     public String getLastName() {
         return LastName;
     }
+
 }

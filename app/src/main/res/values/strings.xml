@@ -84,5 +84,14 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="title_activity_view_complaint">ViewComplaint</string>
+    <string name="complaint_info">COMPLAINT INFO</string>
+    <string name="complaint_description">Complaint Description:</string>
+    <string name="full_name">Tutor Full Name:</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="suspend">SUSPEND</string>
+    <string name="suspend_temporary">SUSPEND (TEMPORARY)</string>
+    <string name="suspend_permanent">SUSPEND (PERMANENT)</string>
+    <string name="administrator">Administrator</string>
 
 </resources>

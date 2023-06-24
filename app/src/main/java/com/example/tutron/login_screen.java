@@ -9,17 +9,23 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class login_screen extends AppCompatActivity {
     Button Registerbtn, Loginbtn;
     TextInputEditText emailform, passwordform;
-
     FirebaseAuth mAuth;
+    FirebaseFirestore db;
 
+    Utils funcs = new Utils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +64,7 @@ public class login_screen extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-
-                            Intent gotomain = new Intent(login_screen.this, MainActivity.class);
-                            startActivity(gotomain);
+                            sendtonext();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -70,5 +74,67 @@ public class login_screen extends AppCompatActivity {
                     });
         });
 
+    }
+    public void sendtonext(){
+        db = FirebaseFirestore.getInstance();
+        DocumentReference doc = db.collection("Users").document(mAuth.getCurrentUser().getUid());
+        doc.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    if(document.getData().get("Type").toString().equals("Administrator")){
+                        Intent adminIntent = new Intent(login_screen.this, Administrator.class);
+                        startActivity(adminIntent);
+                    }
+                    if(document.getData().get("Type").toString().equals("Tutor")){
+                        CheckSuspended(mAuth.getCurrentUser().getUid());
+
+                    }
+                    if(document.getData().get("Type").toString().equals("Student")){
+                        Intent gotomain = new Intent(login_screen.this, MainActivity.class);
+                        startActivity(gotomain);
+                    }
+                } else {
+                    Log.d(TAG, "No such document");
+                }
+            } else {
+                Log.d(TAG, "get failed with ", task.getException());
+            }
+        });
+    }
+
+    public void CheckSuspended(String uid){ // check if a tutor has been suspended
+        DocumentReference doc = db.collection("Tutors").document(uid);
+        doc.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()){
+                    if(document.getBoolean("Suspended").equals(true)){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(login_screen.this);
+                        Timestamp timestamp = document.getTimestamp("SuspendTime");
+                        if(timestamp != null){
+
+                            builder.setMessage("You've been suspended until: " + funcs.FormattedDateBuilder(timestamp) + " (DD-MM-YYYY)");
+                            AlertDialog alert = builder.create();
+                            alert.setTitle("Temporary Suspension Notice");
+                            alert.show();
+                            mAuth.signOut();
+                        }
+                        else{
+                            builder.setMessage("You've been permanently suspended. Goodbye.");
+                            AlertDialog alert = builder.create();
+                            alert.setTitle("Permanent Suspension Notice");
+                            alert.show();
+                            mAuth.signOut();
+                        }
+                    }
+                    else{
+                        Intent gotomain = new Intent(login_screen.this, MainActivity.class);
+                        startActivity(gotomain);
+                    }
+                }
+            }
+        });
     }
 }

@@ -2,7 +2,6 @@ package com.example.tutron;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -20,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore db;
     TextView main;
     Button logout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
         logout.setOnClickListener(v -> {
             mAuth.signOut();
-            Intent sendback = new Intent(MainActivity.this, login_screen.class);
-            startActivity(sendback);
+            finish();
         });
     }
 }
