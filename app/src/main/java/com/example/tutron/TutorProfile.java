@@ -25,6 +25,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -63,57 +64,6 @@ public class TutorProfile extends AppCompatActivity {
 
         GetTopics(mAuth.getCurrentUser().getUid());
 
-        profile_topics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
-                    return;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(TutorProfile.this);
-                builder.setTitle("Delete?");
-                builder.setMessage("Are you sure you want to delete this topic?");
-                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                    db.collection("Tutors")
-                            .document(mAuth.getCurrentUser().getUid())
-                            .update("profile_topics", FieldValue.arrayRemove(profile_topics.getItemAtPosition(position).toString()));
-                    db.collection("Tutors")
-                            .document(mAuth.getCurrentUser().getUid())
-                                    .update("offered_topics", FieldValue.arrayRemove(profile_topics.getItemAtPosition(position).toString()));
-                    finish();
-                    startActivity(getIntent());
-                });
-                builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
-                builder.show();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        offered_topics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
-                    return;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(TutorProfile.this);
-                builder.setTitle("Delete?");
-                builder.setMessage("Are you sure you want to delete this topic?");
-                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                    db.collection("Topics")
-                            .document(mAuth.getCurrentUser().getUid())
-                            .update("offered_topics", FieldValue.arrayRemove(profile_topics.getItemAtPosition(position).toString()));
-                    finish();
-                    startActivity(getIntent());
-                });
-                builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
-                builder.show();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
         edit_topics.setOnClickListener(v -> {
             Intent intent = new Intent(TutorProfile.this, EditTopics.class);
             startActivity(intent);
@@ -150,15 +100,19 @@ public class TutorProfile extends AppCompatActivity {
                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     profile_topics_list = (ArrayList<String>) document.get("profile_topics");
                     offered_topics_list = (ArrayList<String>) document.get("offered_topics");
-                    SetAdapters();
-                    profile_topics.setAdapter(profile_adapter);
-                    offered_topics.setAdapter(offered_adapter);
-                } else {
-                    Map<String, List<String[]>> template = new HashMap<>();
-                    List<String[]> a = new ArrayList<String[]>();
-                    template.put("profile_topics", a);
-                    template.put("offered_topics", a);
-                    db.collection("Topics").document(mAuth.getCurrentUser().getUid()).set(template);
+                    if(profile_topics_list != null && offered_topics_list != null){
+                        SetAdapters();
+                        profile_topics.setAdapter(profile_adapter);
+                        offered_topics.setAdapter(offered_adapter);
+                    }
+                    else {
+                        Map<String, List<String[]>> template = new HashMap<>();
+                        List<String[]> a = new ArrayList<>();
+                        template.put("profile_topics", a);
+                        template.put("offered_topics", a);
+                        db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).set(template, SetOptions.merge());
+                        recreate();
+                    }
                 }
             } else {
                 Log.d(TAG, "get failed with ", task.getException());

@@ -82,8 +82,7 @@ public class tutor_register extends AppCompatActivity {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            Intent returntomain = new Intent(tutor_register.this, login_screen.class);
-                            startActivity(returntomain);
+                            finish();
                         }
                     });
         });
