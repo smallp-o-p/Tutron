@@ -1,4 +1,9 @@
 <resources>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="remove">Remove Selected Topics</string>
+    <string name="Add"> Add Topics</string>
+    <string name="cancel"> Cancel</string>
     <string name="app_name">Tutron</string>
     <string name="login_text">Welcome to Tutron! Please sign in with the form below, or register an account if you don\'t have one yet!</string>
     <string name="tutron">Tutron</string>
@@ -93,5 +98,20 @@
     <string name="suspend_temporary">SUSPEND (TEMPORARY)</string>
     <string name="suspend_permanent">SUSPEND (PERMANENT)</string>
     <string name="administrator">Administrator</string>
+    <string name="your_tutor_profile">Your Tutor Profile:</string>
+    <string name="profile_description">Profile Description:</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="view_topics">View Topics</string>
+    <string name="view_offered_topics">View Offered Topics</string>
+    <string name="edit_topics_and_offered_topics">Edit Topics and Offered Topics</string>
+    <string name="select_profile_topics">Select Profile Topics</string>
+    <string name="select_offered_topics">Select Offered Topics</string>
+    <string name="topics_editing">Topics Editing</string>
+    <string name="remove_profile_topics">Remove Profile Topics</string>
+    <string name="remove_offered_topics">Remove Offered Topics</string>
+    <string name="add_profile_topics">Add Profile Topics</string>
+    <string name="add_offered_topics">Add Offered Topics</string>
+    <string name="add_topic">Add Topic</string>
+    <string name="add_topic_s"> Add Topic(s)</string>
 
 </resources>

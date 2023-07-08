@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-
 public class tutor_register extends AppCompatActivity {
     Bundle extras;
     FirebaseFirestore db;
@@ -62,6 +61,7 @@ public class tutor_register extends AppCompatActivity {
 
             if(TextUtils.isEmpty(desc)){
                 Toast.makeText(getApplicationContext(), "Profile description required.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             if(desc.trim().split("\\s+").length > 600){
@@ -93,7 +93,6 @@ public class tutor_register extends AppCompatActivity {
         ouruser.put("Email", extras.getString("email"));
         ouruser.put("Type", "Tutor");
         db.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).set(ouruser);
-
         db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).set(tutor);
         db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).update("Suspended", false);
         Intent intent = new Intent(tutor_register.this, MainActivity.class);

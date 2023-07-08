@@ -33,8 +33,6 @@ public class login_screen extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

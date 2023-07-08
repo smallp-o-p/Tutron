@@ -13,13 +13,19 @@
         android:theme="@style/Theme.Material3.DayNight"
         tools:targetApi="31">
         <activity
+            android:name=".EditTopics"
+            android:exported="false" />
+        <activity
+            android:name=".TutorProfile"
+            android:exported="false" />
+        <activity
             android:name=".TutorScreen"
             android:exported="false" />
         <activity
             android:name=".ViewComplaint"
             android:exported="false"
             android:label="@string/title_activity_view_complaint"
-            android:theme="@style/Theme.Material3.DayNight"></activity>
+            android:theme="@style/Theme.Material3.DayNight" />
         <activity
             android:name=".tutor_register"
             android:exported="false" />

@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     TextView main;
-    Button logout;
+    Button logout, edit;
+    String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         logout = findViewById(R.id.logoutbtn);
 
+        edit = findViewById(R.id.editprofile);
+
         if(mAuth.getCurrentUser() != null){
             db = FirebaseFirestore.getInstance();
 
@@ -42,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        main.append("\"" + document.getData().get("Type").toString() + "\"");
+                        type = document.getData().get("Type").toString();
+                        main.append("\"" + type + "\"");
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -56,6 +60,17 @@ public class MainActivity extends AppCompatActivity {
             Intent gotologin = new Intent(MainActivity.this, login_screen.class);
             gotologin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(gotologin);
+        });
+
+        edit.setOnClickListener(v -> {
+            if(type.equals("Student")){
+                ;
+            }
+            if(type.equals("Tutor")){
+                Intent TutorIntent = new Intent(MainActivity.this, TutorProfile.class);
+                TutorIntent.putExtra("id", mAuth.getCurrentUser().getUid());
+                startActivity(TutorIntent);
+            }
         });
     }
 }
