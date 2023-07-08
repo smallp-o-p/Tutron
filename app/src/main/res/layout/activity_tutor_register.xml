@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".tutor_register">
 
-
     <TextView
         android:id="@+id/details_tutor_register"
         android:layout_width="match_parent"

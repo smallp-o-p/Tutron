@@ -1,11 +1,17 @@
 package com.example.tutron;
 
+import android.text.Editable;
+import android.text.TextUtils;
+import android.widget.Toast;
+
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-
     public int ValidateEmail(String email) {
         if (email.isEmpty()) {
             return -1;
@@ -48,4 +54,5 @@ public class Utils {
         }
         return 0;
     }
+
 }

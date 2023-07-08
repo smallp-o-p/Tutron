@@ -3,8 +3,10 @@ package com.example.tutron;
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,18 +33,15 @@ import java.util.Arrays;
 public class EditTopics extends AppCompatActivity {
 
     TextView offered_topics_dropdown, profile_topics_dropdown;
-
     ImageButton back;
     FirebaseFirestore db;
-    FirebaseAuth mAuth;
     FirebaseUser usr;
-
     Button add_profile_topics, add_offered_topics;
     ArrayList<Integer> selected_topics = new ArrayList<>();
     ArrayList<Integer> selected_offered_topics = new ArrayList<>();
     ArrayList<String> temp1, temp2;
-
     String[] profile_topics, offered_topics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +63,10 @@ public class EditTopics extends AppCompatActivity {
 
         add_offered_topics = findViewById(R.id.add_offered_topic);
 
+        back = findViewById(R.id.tutor_edit_back);
+
         DocumentReference doc = db.collection("Tutors").document(usr.getUid());
+
         doc.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -83,29 +85,31 @@ public class EditTopics extends AppCompatActivity {
             }
         });
 
-        add_profile_topics.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditTopics.this);
-                builder.setTitle("Add Topic To Your Profile");
+        add_profile_topics.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditTopics.this);
+            builder.setTitle("Add Topic To Your Profile");
 
-                final EditText input = new EditText(EditTopics.this);
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
-                builder.setPositiveButton(R.string.add_topic, (dialog, which) -> {
-                    if(TextUtils.isEmpty(input.getText())){
-                        Toast.makeText(EditTopics.this, "Field cannot be empty.", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        doc.update("profile_topics", FieldValue.arrayUnion(input.getText().toString()));
-                        recreate();
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
-                builder.show();
-            }
+            final EditText input = new EditText(EditTopics.this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            builder.setPositiveButton(R.string.add_topic, (dialog, which) -> {
+                AddTopic(input.getText());
+            });
+            builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+            builder.show();
         });
-
+        back.setOnClickListener(v -> finish());
+    }
+    public boolean AddTopic(Editable add){
+        if(TextUtils.isEmpty(add)){
+            Toast.makeText(EditTopics.this, "Field cannot be empty.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            db.collection("Tutors").document(usr.getUid()).update("profile_topics", FieldValue.arrayUnion(add.toString()));
+            recreate();
+            return true;
+        }
     }
     public void BuildOfferedAdd(String[] profile_topics, String[] offered_topics){
         add_offered_topics.setOnClickListener(v -> {

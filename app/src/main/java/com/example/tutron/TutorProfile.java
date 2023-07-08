@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -33,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class TutorProfile extends AppCompatActivity {
 
     FirebaseFirestore db;
@@ -43,6 +43,8 @@ public class TutorProfile extends AppCompatActivity {
     TextView desc, header;
     Spinner offered_topics, profile_topics;
     Button edit_topics;
+
+    ImageButton back;
     SpinnerAdapter offered_adapter, profile_adapter;
 
     @Override
@@ -60,6 +62,8 @@ public class TutorProfile extends AppCompatActivity {
         profile_topics = findViewById(R.id.profile_topics);
         edit_topics = findViewById(R.id.edit_topics);
 
+        back = findViewById(R.id.tutor_profile_back);
+
         BuildProfile(mAuth.getCurrentUser().getUid());
 
         GetTopics(mAuth.getCurrentUser().getUid());
@@ -68,6 +72,15 @@ public class TutorProfile extends AppCompatActivity {
             Intent intent = new Intent(TutorProfile.this, EditTopics.class);
             startActivity(intent);
         });
+
+        back.setOnClickListener(v -> {
+            finish();
+        });
+    }
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        recreate();
     }
 
     public void BuildProfile(String Uuid){
@@ -105,7 +118,7 @@ public class TutorProfile extends AppCompatActivity {
                         profile_topics.setAdapter(profile_adapter);
                         offered_topics.setAdapter(offered_adapter);
                     }
-                    else {
+                    else { // create it as we go
                         Map<String, List<String[]>> template = new HashMap<>();
                         List<String[]> a = new ArrayList<>();
                         template.put("profile_topics", a);
