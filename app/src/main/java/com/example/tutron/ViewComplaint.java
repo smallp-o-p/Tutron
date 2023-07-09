@@ -28,18 +28,15 @@ import java.util.Map;
 public class ViewComplaint extends AppCompatActivity {
     String tutorid;
     FirebaseFirestore db;
-
     TextView fullname;
-
     TextView desc;
-
     Button suspend_temp;
-
     Button suspend_perm;
-
     Button dismiss;
-
     ImageButton back;
+    DatePickerDialog datepicker;
+
+    String docid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,35 +59,21 @@ public class ViewComplaint extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String docid = intent.getStringExtra("docid");
+        docid = intent.getStringExtra("docid");
+        Log.d(TAG, "docid:" + docid);
 
-        DatePickerDialog datepicker = new DatePickerDialog(ViewComplaint.this);
-
-        DatePickerDialog.OnDateSetListener DatePickerListener = (view, year, month, dayOfMonth) -> {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, month);
-            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            Date d = cal.getTime();
-            Log.d(TAG, d.toString());
-            db.collection("Complaints").document(docid).update("Completed", true);
-            db.collection("Complaints").document(docid).update("Decision", "Suspended (Temporary)");
-            db.collection("Tutors").document(tutorid).update("SuspendTime", d);
-            db.collection("Tutors").document(tutorid).update("Suspended", true);
-            finish();
-        };
-
-        datepicker.setOnDateSetListener(DatePickerListener);
+        datepicker = new DatePickerDialog(ViewComplaint.this);
 
         db.collection("Complaints").document(docid)
                 .get().addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         DocumentSnapshot document = task.getResult();
                         if(document.exists()){
+                            Log.d(TAG, document.getData().toString());
                             desc.append(" " + document.getString("complaintDesc"));
                             tutorid = document.getString("TutorID");
-                            Log.d(TAG, tutorid);
                             getTutorName(docid);
+                            setDatePicker(tutorid);
                         }
                     }
                 });
@@ -117,13 +100,28 @@ public class ViewComplaint extends AppCompatActivity {
 
         back.setOnClickListener(v -> finish());
     }
+
+    public void setDatePicker(String tutor_id){
+        DatePickerDialog.OnDateSetListener DatePickerListener = (view, year, month, dayOfMonth) -> {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, month);
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            Date d = cal.getTime();
+            Log.d(TAG, d.toString());
+            db.collection("Complaints").document(docid).update("Completed", true);
+            db.collection("Complaints").document(docid).update("Decision", "Suspended (Temporary)");
+            db.collection("Tutors").document(tutor_id).update("SuspendTime", d);
+            db.collection("Tutors").document(tutor_id).update("suspended", true);
+            finish();
+        };
+        datepicker.setOnDateSetListener(DatePickerListener);
+    }
     public void getTutorName(String complaintID){
         db.collection("Complaints").document(complaintID).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
-                Log.d(TAG, "document success");
                 if(document.exists()){
-                    Log.d(TAG, String.valueOf(document.getString("firstName")));
                     fullname.append(" " + document.getString("TutorFirstName") + " " + document.getString("TutorLastName"));
                 }
             }

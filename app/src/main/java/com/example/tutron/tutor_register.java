@@ -17,7 +17,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,6 +32,8 @@ public class tutor_register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_register);
+
+        List<String> empty = Collections.emptyList();
 
         extras = getIntent().getExtras();
 
@@ -69,7 +73,7 @@ public class tutor_register extends AppCompatActivity {
                 return;
             }
 
-            Tutor newTutor = new Tutor(extras.get("firstname").toString(), extras.get("lastname").toString(), lang, educ, desc);
+            Tutor newTutor = new Tutor(extras.get("firstname").toString(), extras.get("lastname").toString(), lang, educ, desc, false, null, empty, empty);
 
             mAuth.createUserWithEmailAndPassword(extras.getString("email"), extras.getString("password"))
                     .addOnCompleteListener(this, task -> {

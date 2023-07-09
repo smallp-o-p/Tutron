@@ -110,7 +110,7 @@
     <string name="remove_profile_topics">Remove Profile Topics</string>
     <string name="remove_offered_topics">Remove Offered Topics</string>
     <string name="add_profile_topics">Add Profile Topics</string>
-    <string name="add_offered_topics">Add Offered Topics</string>
+    <string name="add_offered_topics">Add To Offered Topics</string>
     <string name="add_topic">Add Topic</string>
     <string name="add_topic_s"> Add Topic(s)</string>
     <string name="view_profile">View Profile</string>

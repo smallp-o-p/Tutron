@@ -27,6 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class login_screen extends AppCompatActivity {
     Button Registerbtn, Loginbtn;
@@ -62,10 +63,12 @@ public class login_screen extends AppCompatActivity {
             if(TextUtils.isEmpty(String.valueOf(emailform.getText()))){
                 Toast.makeText(login_screen.this, "Email empty.",
                         Toast.LENGTH_SHORT).show();
+                return;
             }
             if(TextUtils.isEmpty(String.valueOf(passwordform.getText()))){
                 Toast.makeText(login_screen.this, "Password empty.",
                         Toast.LENGTH_SHORT).show();
+                return;
             }
 
             mAuth.signInWithEmailAndPassword(String.valueOf(emailform.getText()), String.valueOf(passwordform.getText()))
@@ -119,7 +122,8 @@ public class login_screen extends AppCompatActivity {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){
-                    if(document.getBoolean("Suspended").equals(true)){
+                    Log.d(TAG, String.valueOf(document.getData()));
+                    if(document.getBoolean("Suspended") == true){
                         AlertDialog.Builder builder = new AlertDialog.Builder(login_screen.this);
                         Timestamp timestamp = document.getTimestamp("SuspendTime");
                         if(timestamp != null){

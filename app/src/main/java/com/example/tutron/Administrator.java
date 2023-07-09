@@ -29,7 +29,7 @@ public class Administrator extends AppCompatActivity {
     @Override
     protected void onRestart(){ // refresh the complaints view
         super.onRestart();
-        GenerateComplaints();
+        recreate();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Administrator extends AppCompatActivity {
         complaints.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    if(!Boolean.parseBoolean(document.get("Completed").toString())){
+                    if(!document.getBoolean("Completed")){
                         list.add(document.getId());
                     }
                 }
