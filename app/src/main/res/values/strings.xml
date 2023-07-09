@@ -114,5 +114,6 @@
     <string name="add_topic">Add Topic</string>
     <string name="add_topic_s"> Add Topic(s)</string>
     <string name="view_profile">View Profile</string>
+    <string name="complaint">COMPLAINT INFORMATION</string>
 
 </resources>

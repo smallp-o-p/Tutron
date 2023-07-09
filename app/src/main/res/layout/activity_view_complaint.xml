@@ -25,7 +25,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/complaint_info"
+        android:text="@string/complaint"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -68,25 +68,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/suspendtemp"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/or_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/suspend_temporary" />
-
-        <Button
-            android:id="@+id/suspendperm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/suspend_permanent" />
+            android:layout_marginTop="16dp"
+            android:text="OR"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintTop_toBottomOf="@+id/desc" />
 
         <Button
             android:id="@+id/dismiss"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:backgroundTint="#000000"
             android:text="@string/dismiss" />
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/suspendtemp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="152dp"
+        android:backgroundTint="#125379"
+        android:layout_weight="1"
+        android:text="@string/suspend_temporary"
+        app:layout_constraintTop_toBottomOf="@+id/desc"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/suspendperm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#125379"
+        android:text="@string/suspend_permanent"
+        app:layout_constraintTop_toBottomOf="@+id/suspendtemp"
+        tools:layout_editor_absoluteX="-2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
