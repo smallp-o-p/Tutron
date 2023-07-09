@@ -36,7 +36,7 @@
         app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39" />
+        app:layout_constraintVertical_bias="0.281" />
 
     <TextView
         android:id="@+id/offered_topics_dropdown"
@@ -55,7 +55,7 @@
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.556" />
+        app:layout_constraintVertical_bias="0.428" />
 
     <TextView
         android:id="@+id/topics_header"
@@ -74,21 +74,24 @@
         android:id="@+id/add_profile_topic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#125379"
         android:text="@string/add_profile_topics"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/offered_topics_dropdown"
-        app:layout_constraintVertical_bias="0.234" />
+        app:layout_constraintVertical_bias="0.212" />
 
     <Button
         android:id="@+id/add_offered_topic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#125379"
         android:text="@string/add_offered_topics"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_profile_topic"
-        app:layout_constraintVertical_bias="0.186" />
+        app:layout_constraintVertical_bias="0.35" />
 </androidx.constraintlayout.widget.ConstraintLayout>
