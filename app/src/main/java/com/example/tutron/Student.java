@@ -3,19 +3,12 @@ package com.example.tutron;
 import java.io.Serializable;
 
 public class Student implements Serializable {
-
     private String FirstName;
-
     private String LastName;
-
     private String Address;
-
     private String CardNumber;
-
     private String cvv;
-
     private String ExpMonth;
-
     private String ExpYear;
 
     public Student(String firstName, String lastName, String address, String cardNumber, String cvv, String expMonth, String expYear) {
@@ -27,6 +20,8 @@ public class Student implements Serializable {
         ExpMonth = expMonth;
         ExpYear = expYear;
     }
+
+    public Student(){}
 
     public String getFirstName() {
         return FirstName;

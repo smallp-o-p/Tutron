@@ -101,7 +101,6 @@ public class login_screen extends AppCompatActivity {
                     }
                     if(document.getData().get("Type").toString().equals("Tutor")){
                         CheckSuspended(mAuth.getCurrentUser().getUid());
-
                     }
                     if(document.getData().get("Type").toString().equals("Student")){
                         Intent gotomain = new Intent(login_screen.this, MainActivity.class);
@@ -123,7 +122,7 @@ public class login_screen extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){
                     Log.d(TAG, String.valueOf(document.getData()));
-                    if(document.getBoolean("Suspended") == true){
+                    if(Boolean.TRUE.equals(document.getBoolean("Suspended"))){
                         AlertDialog.Builder builder = new AlertDialog.Builder(login_screen.this);
                         Timestamp timestamp = document.getTimestamp("SuspendTime");
                         if(timestamp != null){
@@ -132,7 +131,7 @@ public class login_screen extends AppCompatActivity {
                             cal.setTime(d);
                             SimpleDateFormat formatted = new SimpleDateFormat("dd-MM-yyyy");
                             formatted.setTimeZone(cal.getTimeZone());
-                            builder.setMessage("You've been suspended until: " + formatted.format(cal.getTime()) + " (DD-MM-YYYY)");
+                            builder.setMessage("You've been suspended until:\n" + formatted.format(cal.getTime()) + "\n(DD-MM-YYYY)");
                             AlertDialog alert = builder.create();
                             alert.setTitle("Temporary Suspension Notice");
                             alert.show();
@@ -147,8 +146,8 @@ public class login_screen extends AppCompatActivity {
                         }
                     }
                     else{
-                        Intent gotomain = new Intent(login_screen.this, MainActivity.class);
-                        startActivity(gotomain);
+                        Intent gototutorscreen = new Intent(login_screen.this, TutorScreen.class);
+                        startActivity(gototutorscreen);
                     }
                 }
             }

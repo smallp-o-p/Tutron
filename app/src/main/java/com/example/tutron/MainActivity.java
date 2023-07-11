@@ -46,7 +46,12 @@ public class MainActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         type = document.getData().get("Type").toString();
-                        main.append("\"" + type + "\"");
+                        if(type.equals("Student")){
+                            ;
+                        }
+                        if(type.equals("Tutor")){
+
+                        }
                     } else {
                         Log.d(TAG, "No such document");
                     }
