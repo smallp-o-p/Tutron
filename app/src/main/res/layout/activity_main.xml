@@ -7,26 +7,12 @@
     android:layout_gravity="center"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/mainText"
-        android:layout_width="302dp"
-        android:layout_height="wrap_content"
-        android:text="Welcome!
-
-         You are logged in as User "
-        android:textSize="32sp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/logoutbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
         android:backgroundTint="#125379"
+        android:text="@string/logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
@@ -38,12 +24,61 @@
         android:id="@+id/editprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/view_profile"
         android:backgroundTint="#125379"
+        android:text="@string/view_profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/search_for_a_tutor"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/view_purchase_requests_button"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/view_purchase_requests"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/rate_a_tutor"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="@string/rate_a_tutor_submit_a_complaint"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/student_welcome"
+        android:layout_width="302dp"
+        android:layout_height="100dp"
+        android:text="@string/dashboard_studentwelcome"
+        android:textSize="24sp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.132" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

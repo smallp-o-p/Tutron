@@ -39,6 +39,8 @@ public class TutorScreen extends AppCompatActivity {
     ListView list;
     ArrayList<String> students = new ArrayList<>();
 
+    ArrayList<String> rqs_id = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,14 +70,15 @@ public class TutorScreen extends AppCompatActivity {
                 }
             });
 
-            Query query = db.collection("Requests").whereEqualTo("TutorID", mAuth.getCurrentUser().getUid()).whereEqualTo("Status", 0);
+            Query query = db.collection("Tutors")
+                    .document(mAuth.getCurrentUser().getUid()).collection("requests").whereEqualTo("status", 0);
             query.get().addOnCompleteListener(task -> {
                if(task.isSuccessful()){
                    QuerySnapshot docs = task.getResult();
                    for(QueryDocumentSnapshot doc : docs){
                        Request request = doc.toObject(Request.class);
-                       request.setID(doc.getId());
                        rqs.add(request);
+                       rqs_id.add(doc.getId());
                    }
                     BuildList();
                }
@@ -119,12 +122,12 @@ public class TutorScreen extends AppCompatActivity {
             });
 
             builder.setPositiveButton("Approve", (dialog, which) -> {
-                db.collection("Requests").document(rqs.get(position).getID()).update("Status", 1);
+                db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).collection("requests").document(rqs_id.get(position)).update("status", 1);
                 recreate();
             });
 
             builder.setNegativeButton("Reject", (dialog, which) -> {
-                db.collection("Requests").document(rqs.get(position).getID()).update("Status", -1);
+                db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).collection("requests").document(rqs_id.get(position)).update("status", -1);
                 recreate();
             });
             builder.show();

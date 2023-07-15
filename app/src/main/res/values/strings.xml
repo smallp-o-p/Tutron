@@ -86,5 +86,18 @@
     <string name="hello">"Hello "</string>
     <string name="hello_there">Hello %1$s %2$s!</string>
     <string name="your_rating">Your Rating:</string>
+    <string name="search_for_a_tutor">Search for a Tutor</string>
+    <string name="sort_by">Sort by:</string>
+    <string name="view_purchase_requests">View Purchase Requests</string>
+    <string name="rate_a_tutor_submit_a_complaint">Rate a Tutor/Submit a Complaint</string>
+    <string name="dashboard_studentwelcome"> Hello! \n Welcome to the Student Dashboard!</string>
+    <string name="search"> Search</string>
+    <string name="back">Back</string>
+    <string name="search_results">Search Results</string>
+    <string name="viewmore"> View More </string>
+    <string name="tutor_profile">Tutor Profile:</string>
+    <string name="rating">Rating:</string>
+    <string name="request_a_lesson">Request a Lesson</string>
+    <string name="education">Education:</string>
 
 </resources>

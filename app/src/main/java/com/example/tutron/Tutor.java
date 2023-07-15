@@ -12,13 +12,20 @@ public class Tutor {
     private String Education;
     private String description;
     private Image pfp;
-    private boolean suspended;
-
+    private boolean Suspended;
     private String SuspendTime;
-
     private List<String> profile_topics;
-
     private List<String> offered_topics;
+
+    public String getUUID() {
+        return UUID;
+    }
+    public Tutor setUUID(String UUID) {
+        this.UUID = UUID;
+        return this;
+    }
+
+    private String UUID;
 
     public Tutor(){}
 
@@ -28,19 +35,19 @@ public class Tutor {
         this.lang = lang;
         this.Education = education;
         this.description = description;
-        this.suspended = suspended;
+        this.Suspended = suspended;
         this.SuspendTime = SuspendTime;
         this.profile_topics = profile_topics;
         this.offered_topics = offered_topics;
     }
-    public void suspend(){
-        this.suspended = true;
+    public void SetSuspended(){
+        this.Suspended = true;
     }
     public void temp_suspension(String suspend_time){
         this.SuspendTime = suspend_time;
     }
     public boolean GetSuspended(){
-        return suspended;
+        return Suspended;
     }
     public String getSuspendTime() {
         return SuspendTime;

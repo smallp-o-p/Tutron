@@ -17,10 +17,6 @@ public class Request {
 
     private String TopicName;
 
-
-
-    private String ID;
-
     public String getStudentFirstName() {
         return StudentFirstName;
     }
@@ -103,11 +99,4 @@ public class Request {
         TopicName = topicName;
     }
 
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
-    }
 }
