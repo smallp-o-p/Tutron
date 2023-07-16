@@ -12,14 +12,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
-    FirebaseFirestore db;
-    Button logout, edit, complaint, search, view_requests;
+    Button logout, complaint, search, view_requests;
     TextView welcome;
-    String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         logout = findViewById(R.id.logoutbtn);
-
-        edit = findViewById(R.id.editprofile);
 
         complaint = findViewById(R.id.complaint);
 
@@ -95,19 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         logout.setOnClickListener(v -> {
             mAuth.signOut();
-            Intent gotologin = new Intent(MainActivity.this, login_screen.class);
-            gotologin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(gotologin);
+            finish();
         });
 
-        edit.setOnClickListener(v -> {
-            if(type.equals("Student")){
-            }
-            if(type.equals("Tutor")){
-                Intent TutorIntent = new Intent(MainActivity.this, TutorProfile.class);
-                TutorIntent.putExtra("id", mAuth.getCurrentUser().getUid());
-                startActivity(TutorIntent);
-            }
-        });
     }
 }

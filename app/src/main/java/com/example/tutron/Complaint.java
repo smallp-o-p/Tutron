@@ -1,8 +1,5 @@
 package com.example.tutron;
 
-import java.util.Date;
-import java.util.List;
-
 public class Complaint{
 
     private boolean completed;

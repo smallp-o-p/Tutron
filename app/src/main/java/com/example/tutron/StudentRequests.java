@@ -2,29 +2,27 @@ package com.example.tutron;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -33,8 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class StudentRequests extends AppCompatActivity {
 
@@ -43,25 +40,17 @@ public class StudentRequests extends AppCompatActivity {
     // rejected : -1
 
     ImageButton back_to_profile;
-    TextView tutor_name;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     ArrayList<Request> rqs = new ArrayList<>();
     ListView list;
     ArrayList<String> students = new ArrayList<>();
-    String studentFirstName;
-    String studentLastName;
     ArrayList<String> rqs_id = new ArrayList<>();
-
-    EditText editTextRating;
-    Button buttonRateTutor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_requests);
-
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -69,12 +58,7 @@ public class StudentRequests extends AppCompatActivity {
 
         back_to_profile = findViewById(R.id.students_requests_back);
 
-        //tutor_name = findViewById(R.id.tutor_screen_welcome);
-
         list = findViewById(R.id.listView_purchase_requests);
-
-        //editTextRating = findViewById(R.id.editText_rating);
-        //buttonRateTutor = findViewById(R.id.button_rate);
 
         if (mAuth.getCurrentUser() != null) {
             String currentStudentID = mAuth.getCurrentUser().getUid();
@@ -99,23 +83,33 @@ public class StudentRequests extends AppCompatActivity {
                     });
         }
 
-
         back_to_profile.setOnClickListener(v -> finish());
 
     }
 
     public void BuildList() {
+
+        ArrayList<Task<?>> tasks = new ArrayList<>();
         students.clear();
-        for (Request r : rqs) {
-            students.add(r.getStudentFirstName() + " " + r.getStudentLastName());
+
+        for(Request r : rqs){
+            Task<DocumentSnapshot> task = db.collection("Tutors").document(r.getTutorID()).get();
+            tasks.add(task);
         }
-
-
-
-
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(StudentRequests.this, R.layout.simple_list_item_1, students);
-            list.setAdapter(adapter);
+        Tasks.whenAllComplete(tasks).addOnSuccessListener(new OnSuccessListener<List<Task<?>>>() {
+            @Override
+            public void onSuccess(List<Task<?>> tasks) {
+                int count = 0;
+                for(Task<?> t: tasks){
+                    if(t.isSuccessful()){
+                        DocumentSnapshot d = (DocumentSnapshot) t.getResult();
+                        students.add(d.getString("firstName") + " " + d.getString("lastName") +": " + rqs.get(count++).getTopicName());
+                    }
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(StudentRequests.this, R.layout.simple_list_item_1, students);
+                list.setAdapter(adapter);
+            }
+        });
 
 
         list.setOnItemClickListener((parent, view, position, id) -> {
@@ -127,64 +121,77 @@ public class StudentRequests extends AppCompatActivity {
             builder.setView(viewInflated);
 
             EditText ratingEditText = viewInflated.findViewById(R.id.editText_rating);
+            ratingEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             EditText reviewEditText = viewInflated.findViewById(R.id.editText_review);
-            EditText nameEditText = viewInflated.findViewById(R.id.editText_name);
+            CheckBox anonymous_check = viewInflated.findViewById(R.id.anonymous_check);
 
             builder.setPositiveButton("Rate", (dialog, which) -> {
                 String ratingStr = ratingEditText.getText().toString().trim();
                 String review = reviewEditText.getText().toString().trim();
-                String name = nameEditText.getText().toString().trim();
+                Query query = db.collection("Tutors").document(rqs.get(position)
+                                .getTutorID()).collection("ratings")
+                        .whereEqualTo("studentID", mAuth.getCurrentUser().getUid())
+                        .whereEqualTo("topicName", rqs.get(position).getTopicName())
+                        .whereEqualTo("tutorID", rqs.get(position).getTutorID());
 
-                if (!ratingStr.isEmpty() && !review.isEmpty() && !name.isEmpty()) {
-                    int rating = Integer.parseInt(ratingStr);
-                    if (rating >= 1 && rating <= 5) {
-                        String currentStudentID = mAuth.getCurrentUser().getUid();
+                Task<QuerySnapshot> check_already_reviewed = query.get();
+                if(Tasks.whenAllComplete(check_already_reviewed).getResult() != null){
+                    Toast.makeText(StudentRequests.this, "You already put a review for this Tutor and Topic.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    if (!ratingStr.isEmpty() && !review.isEmpty()) {
+                        double rating = Double.parseDouble(ratingStr);
+                        if (rating >= 1 && rating <= 5) {
+                            String currentStudentID = mAuth.getCurrentUser().getUid();
 
-                        int selectedPosition = position;
-                        if (selectedPosition != ListView.INVALID_POSITION) {
-                            Request selectedRequest = rqs.get(selectedPosition);
-                            int status = selectedRequest.getStatus();
-                            if (status == 1) {
-                                // Request is approved, proceed with the rating
-                                String tutorID = selectedRequest.getTutorID(); // Get the tutor ID from the selected request
-                                String topicName = selectedRequest.getTopicName(); // Get the topic name from the selected request
-                                //String requestId = rqs_id.get(selectedPosition); // Get the request ID from the list
+                            int selectedPosition = position;
+                            if (selectedPosition != ListView.INVALID_POSITION) {
+                                Request selectedRequest = rqs.get(selectedPosition);
+                                int status = selectedRequest.getStatus();
+                                if (status == 1) {
+                                    // Request is approved, proceed with the rating
+                                    String tutorID = selectedRequest.getTutorID(); // Get the tutor ID from the selected request
+                                    String topicName = selectedRequest.getTopicName(); // Get the topic name from the selected request
+                                    //String requestId = rqs_id.get(selectedPosition); // Get the request ID from the list
 
-                                DocumentReference tutorRef = db.collection("Tutors").document(tutorID);
+                                    DocumentReference tutorRef = db.collection("Tutors").document(tutorID);
 
-                                // Create a new document in the "ratings" subcollection with the given rating ID
-                                DocumentReference ratingRef = tutorRef.collection("ratings").document(currentStudentID);
+                                    // Create a new document in the "ratings" subcollection with the given rating ID
+                                    DocumentReference ratingRef = tutorRef.collection("ratings").document(currentStudentID);
+                                    SimpleDateFormat formatter = new SimpleDateFormat();
+                                    Date date = new Date();
+                                    // Set the data for the new rating document
+                                    String name;
+                                    if(anonymous_check.isChecked()){
+                                        name = "Anonymous";
+                                    }
+                                    else{
+                                        name = rqs.get(position).getStudentFirstName() + " " + rqs.get(position).getStudentLastName();
+                                    }
+                                    Rating newreview = new Rating(rating, review, topicName, name, date, currentStudentID, tutorID);
 
-                                // Set the data for the new rating document
-                                Map<String, Object> ratingData = new HashMap<>();
-                                ratingData.put("rating", rating);
-                                ratingData.put("name", name);
-                                ratingData.put("desc", review);
-                                ratingData.put("studentID", currentStudentID);
-                                ratingData.put("tutorID", tutorID);
-                                ratingData.put("topicName", topicName);
-                                //ratingData.put("requestID", requestId);
-                                ratingData.put("datePosted", FieldValue.serverTimestamp());
-
-                                ratingRef.set(ratingData)
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(StudentRequests.this, "Tutor rated successfully!", Toast.LENGTH_SHORT).show();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(StudentRequests.this, "Failed to rate tutor. Please try again.", Toast.LENGTH_SHORT).show();
-                                        });
+                                    ratingRef.set(newreview)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(StudentRequests.this, "Tutor rated successfully!", Toast.LENGTH_SHORT).show();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(StudentRequests.this, "Failed to rate tutor. Please try again.", Toast.LENGTH_SHORT).show();
+                                            });
+                                } else {
+                                    Toast.makeText(StudentRequests.this, "You can only rate an approved request.", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                Toast.makeText(StudentRequests.this, "You can only rate an approved request.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(StudentRequests.this, "Please select a tutor request to rate.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(StudentRequests.this, "Please select a tutor request to rate.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StudentRequests.this, "Please enter a rating between 1 and 5.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(StudentRequests.this, "Please enter a rating between 1 and 5.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentRequests.this, "Please fill out all fields.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(StudentRequests.this, "Please fill out all fields.", Toast.LENGTH_SHORT).show();
+
                 }
+
             });
 
             builder.setNegativeButton("Cancel", (dialog, which) -> {
@@ -194,9 +201,7 @@ public class StudentRequests extends AppCompatActivity {
             builder.show();
         });
 
-
         list.setOnItemLongClickListener((parent, view, position, id) -> {
-
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(StudentRequests.this);
 
@@ -204,7 +209,6 @@ public class StudentRequests extends AppCompatActivity {
 
                 Date date = rqs.get(position).getRequestedDate();
                 String tutorID = rqs.get(position).getTutorID();
-
 
                 SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
                 String stringDate = DateFor.format(date);

@@ -104,4 +104,9 @@
     <string name="your_hourly_rating_tap_to_edit">Your Hourly Rating (Tap to Edit) :</string>
     <string name="hourly_rate_tap_to_edit">Hourly Rate (Tap to Edit):</string>
     <string name="proceed"> Proceed</string>
+    <string name="to_leave_a_rating_tap_on_the_request_you_want_to_rate">To leave a rating, tap on the request you want to rate</string>
+    <string name="long_press_to_view_more_details_on_purchase_requests">Long press to view more details on purchase requests</string>
+    <string name="purchase_requests">Purchase Requests</string>
+    <string name="post_anonymously">Post Anonymously?</string>
+    <string name="post_anonymously_edittext_for_the_name">Post Anonymously?</string>
 </resources>

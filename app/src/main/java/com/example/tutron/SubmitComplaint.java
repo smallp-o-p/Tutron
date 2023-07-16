@@ -2,50 +2,39 @@ package com.example.tutron;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
+import android.util.Pair;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import android.util.Pair;
+import java.util.Map;
 
 public class SubmitComplaint extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth mAuth;
     TextView tutor_name;
     ImageButton back;
-
-    DatePickerDialog datepicker;
     String studentFirstName;
     String studentLastName;
     String docid;
+
+    ArrayList<String> tutors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +95,6 @@ public class SubmitComplaint extends AppCompatActivity {
                         .whereEqualTo("status", 1)
                         .get()
                         .addOnSuccessListener(querySnapshot1 -> {
-                            ArrayList<String> tutors = new ArrayList<>();
                             ArrayList<String> names = new ArrayList<>();
                             ArrayList<Pair<String, String>> names_two = new ArrayList<>();
                             Log.d(TAG, "This is a debug message");
@@ -114,7 +102,6 @@ public class SubmitComplaint extends AppCompatActivity {
                                 String tutor = document.getString("tutorID");
                                 tutors.add(tutor);
                             }
-
                             for (int i = 0; i < tutors.size(); i++) {
                                 String tutorID = tutors.get(i);
                                 for (Pair<String, Pair<String, String>> keyValuePair : keyValueList) {
@@ -124,12 +111,11 @@ public class SubmitComplaint extends AppCompatActivity {
                                     String lastname = namePair.second;
 
                                     if (tutorID.equals(documentId)) {
-                                        names.add(firstname + " " + lastname + " " + tutorID);
+                                        names.add(firstname + " " + lastname);
                                         names_two.add(namePair);
                                     }
                                 }
                             }
-
                             ArrayAdapter<String> ad_tutor = new ArrayAdapter<>(SubmitComplaint.this, android.R.layout.simple_spinner_item, names);
                             tutorspinner.setAdapter(ad_tutor);
                         });
@@ -145,19 +131,21 @@ public class SubmitComplaint extends AppCompatActivity {
             String[] parts = tutor.split(" ");
             String firstName = parts[0];
             String lastName = parts[1];
-            String tutorID = parts[2];
+
+            String tutorID = tutors.get(tutorspinner.getSelectedItemPosition());
 
             if(TextUtils.isEmpty(desc)){
                 Toast.makeText(getApplicationContext(), "Complaint description required.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(desc.trim().split("\\s+").length > 700){
+            if(desc.length() > 700){
                 Toast.makeText(getApplicationContext(), "Complaint description is too long.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             Complaint newComplaint = new Complaint(tutorID, firstName, lastName, desc);
+            Toast.makeText(SubmitComplaint.this, "Complaint submitted.", Toast.LENGTH_SHORT).show();
             GoToNext(newComplaint);
 
         });
@@ -168,10 +156,7 @@ public class SubmitComplaint extends AppCompatActivity {
         db.collection("Complaints").document().set(complaint)
                 .addOnSuccessListener(aVoid -> {
                     // The complaint was successfully written to the database
-                    Intent intent = new Intent(SubmitComplaint.this, MainActivity.class);
-                    intent.putExtra("user", mAuth.getCurrentUser());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    finish();
                 })
                 .addOnFailureListener(e -> {
                     // An error occurred while writing the complaint to the database
