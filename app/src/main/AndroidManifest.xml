@@ -22,7 +22,13 @@
             android:name=".StudentScreen"
             android:exported="false" />
         <activity
+            android:name=".SubmitComplaint"
+            android:exported="false" />
+        <activity
             android:name=".EditTopics"
+            android:exported="false" />
+        <activity
+            android:name=".StudentRequests"
             android:exported="false" />
         <activity
             android:name=".TutorProfile"
