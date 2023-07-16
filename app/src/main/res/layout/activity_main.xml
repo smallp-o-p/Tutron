@@ -56,14 +56,15 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/view_purchase_requests"
+            android:text="View Purchase Request/Rate Tutor"
             android:textSize="20sp" />
+        />
 
         <Button
-            android:id="@+id/rate_a_tutor"
+            android:id="@+id/complaint"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="@string/rate_a_tutor_submit_a_complaint"
+            android:text="Submit a Complaint"
             android:textSize="18sp" />
     </LinearLayout>
 

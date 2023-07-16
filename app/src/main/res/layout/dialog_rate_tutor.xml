@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- EditText for the number rating -->
+        <EditText
+            android:id="@+id/editText_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter rating for the tutor (1-5)"
+            android:inputType="number" />
+
+        <!-- EditText for the review -->
+        <EditText
+            android:id="@+id/editText_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your review here..."
+            android:inputType="textMultiLine" />
+
+        <!-- EditText for the name -->
+        <EditText
+            android:id="@+id/editText_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name here..."
+            android:inputType="text" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

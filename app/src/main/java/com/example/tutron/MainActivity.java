@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
-    Button logout, edit, rate, search, view_requests;
+    Button logout, edit, complaint, search, view_requests;
     TextView welcome;
     String type;
 
@@ -32,13 +32,19 @@ public class MainActivity extends AppCompatActivity {
 
         edit = findViewById(R.id.editprofile);
 
-        rate = findViewById(R.id.rate_a_tutor);
+        complaint = findViewById(R.id.complaint);
 
         search = findViewById(R.id.search_button);
 
         view_requests = findViewById(R.id.view_purchase_requests_button);
 
         welcome = findViewById(R.id.student_welcome);
+
+        view_requests.setOnClickListener(v -> {
+            Intent gotorequests = new Intent(MainActivity.this, StudentRequests.class);
+            startActivity(gotorequests);
+        });
+
 
         search.setOnClickListener(v -> {
 
@@ -80,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
             });
 
             builder.show();
+        });
+
+        complaint.setOnClickListener(v -> {
+            Intent gotocomplaint = new Intent(MainActivity.this, SubmitComplaint.class);
+            startActivity(gotocomplaint);
         });
 
         logout.setOnClickListener(v -> {
