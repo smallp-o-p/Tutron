@@ -111,7 +111,6 @@ public class StudentRequests extends AppCompatActivity {
             }
         });
 
-
         list.setOnItemClickListener((parent, view, position, id) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(StudentRequests.this);
             builder.setTitle("Rate Tutor");
@@ -133,12 +132,6 @@ public class StudentRequests extends AppCompatActivity {
                         .whereEqualTo("studentID", mAuth.getCurrentUser().getUid())
                         .whereEqualTo("topicName", rqs.get(position).getTopicName())
                         .whereEqualTo("tutorID", rqs.get(position).getTutorID());
-
-                Task<QuerySnapshot> check_already_reviewed = query.get();
-                if(Tasks.whenAllComplete(check_already_reviewed).getResult() != null){
-                    Toast.makeText(StudentRequests.this, "You already put a review for this Tutor and Topic.", Toast.LENGTH_SHORT).show();
-                }
-                else{
                     if (!ratingStr.isEmpty() && !review.isEmpty()) {
                         double rating = Double.parseDouble(ratingStr);
                         if (rating >= 1 && rating <= 5) {
@@ -189,9 +182,6 @@ public class StudentRequests extends AppCompatActivity {
                     } else {
                         Toast.makeText(StudentRequests.this, "Please fill out all fields.", Toast.LENGTH_SHORT).show();
                     }
-
-                }
-
             });
 
             builder.setNegativeButton("Cancel", (dialog, which) -> {
