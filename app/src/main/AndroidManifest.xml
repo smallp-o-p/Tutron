@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Material3.DayNight"
         tools:targetApi="31">
         <activity
+            android:name=".TutorReviews"
+            android:exported="false" />
+        <activity
+            android:name=".RateComplainTutor"
+            android:exported="false" />
+        <activity
             android:name=".ViewTutorProfile"
             android:exported="false" />
         <activity

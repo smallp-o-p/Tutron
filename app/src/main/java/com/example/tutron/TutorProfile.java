@@ -5,11 +5,13 @@ import static android.content.ContentValues.TAG;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -27,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class TutorProfile extends AppCompatActivity {
 
@@ -34,11 +37,14 @@ public class TutorProfile extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser user;
     ArrayList<Topic> all_topics_list = new ArrayList<>();
-    TextView desc, header;
+    TextView desc, header, hourlyrate;
     Spinner offered_topics, profile_topics;
     Button edit_topics;
     ImageButton back;
     SpinnerAdapter offered_adapter, profile_adapter;
+
+
+    TextView tutor_rating;
     @Override
     protected void onRestart(){
         super.onRestart();
@@ -55,9 +61,13 @@ public class TutorProfile extends AppCompatActivity {
 
         desc = findViewById(R.id.tutor_desc);
         header = findViewById(R.id.tutor_profile_header);
+
+        hourlyrate = findViewById(R.id.tutor_profile_hourlyrate);
         offered_topics = findViewById(R.id.offered_topics);
         profile_topics = findViewById(R.id.profile_topics);
         edit_topics = findViewById(R.id.edit_topics);
+
+        tutor_rating = findViewById(R.id.tutor_rating);
 
         back = findViewById(R.id.tutor_profile_back);
 
@@ -65,15 +75,39 @@ public class TutorProfile extends AppCompatActivity {
 
         GetTopics(mAuth.getCurrentUser().getUid());
 
+        GetRating();
+
         edit_topics.setOnClickListener(v -> {
             Intent intent = new Intent(TutorProfile.this, EditTopics.class);
             startActivity(intent);
+        });
+
+        hourlyrate.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(TutorProfile.this);
+            builder.setTitle("Edit Hourly Rate");
+            EditText newrate = new EditText(TutorProfile.this);
+            newrate.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            builder.setView(newrate);
+            builder.setPositiveButton(R.string.proceed, (dialog, which) -> {
+                        db.collection("Tutors")
+                                .document(mAuth.getCurrentUser().getUid())
+                                .update("hourly", Double.parseDouble(newrate.getText().toString()));
+                recreate();
+            });
+
+            builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+                dialog.dismiss();
+            });
+
+            builder.show();
+
+
+
         });
         profile_topics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position == 0){
-                    return;
                 }
                 else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(TutorProfile.this);
@@ -108,11 +142,18 @@ public class TutorProfile extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    if(document.getData().get("firstName") != null && document.getData().get("lastName") != null){
-                        header.append(" " + document.getData().get("firstName").toString() + " " + document.getData().get("lastName").toString());
+                    if(document.get("firstName") != null && document.getData().get("lastName") != null){
+                        header.append(" " + document.get("firstName").toString() + " " + document.get("lastName").toString());
                     }
-                    if(document.getData().get("description") != null){
-                        desc.append(document.getData().get("description").toString());
+                    if(document.get("description") != null){
+                        desc.append(document.get("description").toString());
+                    }
+                    if(document.get("hourly") != null){
+                        hourlyrate.append(" " + document.get("hourly").toString());
+                    }
+                    if(document.get("hourly") == null){
+                        db.collection("Tutors").document(Uuid).update("hourly", 15.5);
+                        recreate();
                     }
                 } else {
                     Log.d(TAG, "No such document");
@@ -162,5 +203,31 @@ public class TutorProfile extends AppCompatActivity {
 
         profile_topics.setAdapter(profile_adapter);
         offered_topics.setAdapter(offered_adapter);
+    }
+
+    public void GetRating(){
+        db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).collection("ratings").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                if(task.getResult().size() != 0) {
+                    float rating = 0;
+                    int size = 0;
+                    for (DocumentSnapshot doc : task.getResult()) {
+                        rating += Float.parseFloat(doc.get("rating").toString());
+                        size++;
+                    }
+                    String format = String.format(Locale.US, "%.2f", rating/size);
+                    Log.d(TAG, format);
+                    db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).update("rating", Double.parseDouble(format));
+                    tutor_rating.append(" " + format +"/5");
+                }
+                else{
+                    tutor_rating.setText("N/A");
+                }
+            }
+        });
+        tutor_rating.setOnClickListener(v -> {
+            Intent to_ratings = new Intent(TutorProfile.this, TutorReviews.class);
+            startActivity(to_ratings);
+        });
     }
 }

@@ -4,11 +4,11 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class StudentScreen extends AppCompatActivity {
+public class RateComplainTutor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_screen);
+        setContentView(R.layout.activity_rate_complain_tutor);
     }
 }

@@ -6,9 +6,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,12 +22,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +34,11 @@ public class EditTopics extends AppCompatActivity {
     ImageButton back;
     FirebaseFirestore db;
     FirebaseUser usr;
-    Button add_profile_topics, add_offered_topics;
+    Button add_profile_topics;
     ArrayList<String> topic_ids = new ArrayList<>();
-    ArrayList<Integer> selected_topics = new ArrayList<>();
+    ArrayList<String> offered_ids = new ArrayList<>();
     ArrayList<Topic> topic_list = new ArrayList<>();
+    Integer offered_count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +54,6 @@ public class EditTopics extends AppCompatActivity {
 
         add_profile_topics = findViewById(R.id.add_profile_topic);
 
-        add_offered_topics = findViewById(R.id.add_offered_topic);
-
         back = findViewById(R.id.tutor_edit_back);
 
         CollectionReference coll = db.collection("Tutors").document(usr.getUid()).collection("profile_topics");
@@ -70,7 +64,9 @@ public class EditTopics extends AppCompatActivity {
                     if(document.exists()){
                         topic_list.add(document.toObject(Topic.class));
                         topic_ids.add(document.getId());
-                        Log.d(TAG, document.toObject(Topic.class).getName());
+                        if(Boolean.TRUE.equals(document.getBoolean("offered"))){
+                            offered_ids.add(document.getId());
+                        }
                     }
                 }
                 BuildTopics(topic_list);
@@ -126,30 +122,44 @@ public class EditTopics extends AppCompatActivity {
 
             builder.setMultiChoiceItems(user_viewable_profile.toArray(new String[0]), bool1, (dialog, which, isChecked) -> {
                 bool1[which] = isChecked;
+
             });
             builder.setPositiveButton(R.string.add_offered_topics, (dialog, which) -> {
-                for(int i = 0; i<bool1.length; i++){
+                int count = 0;
+                for(int i = 0; i<bool1.length; i++ ){
                     if(bool1[i]){
-                        db.collection("Tutors").document(usr.getUid()).collection("profile_topics").document(topic_ids.get(i)).update("offered", true);
+                        count++;
                     }
                 }
-                recreate(); // reset view so the updated list is shown
+                Log.d(TAG, String.valueOf(offered_ids.size()+ offered_count));
+                if(offered_ids.size() + count > 5){
+                    Toast.makeText(EditTopics.this, "You can only offer at most 5 topics.", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    for(int i = 0; i<bool1.length; i++){
+                        if(bool1[i]){
+                            db.collection("Tutors").document(usr.getUid()).collection("profile_topics").document(topic_ids.get(i)).update("offered", true);
+                        }
+                    }
+                    recreate(); // reset view so the updated list is shown
+                }
             });
-
             builder.setNeutralButton(R.string.cancel, (dialog, which) -> {
                 dialog.dismiss();
             });
             builder.setNegativeButton(R.string.remove, (dialog, which) -> {
                Log.d(TAG, "remove");
-               for(Integer i: selected_topics){
-                   db.collection("Tutors").document(usr.getUid()).collection("profile_topics").document(topic_ids.get(i)).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                       @Override
-                       public void onComplete(@NonNull Task<Void> task) {
-                           if(task.isSuccessful()){
-                               Log.d(TAG, "Deleted!");
+               for(int i =0; i<bool1.length; i++){
+                   if(bool1[i]){
+                       db.collection("Tutors").document(usr.getUid()).collection("profile_topics").document(topic_ids.get(i)).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                           @Override
+                           public void onComplete(@NonNull Task<Void> task) {
+                               if(task.isSuccessful()){
+                                   Log.d(TAG, "Deleted!");
+                               }
                            }
-                       }
-                   });
+                       });
+                   }
                }
             });
             builder.show();
@@ -170,11 +180,14 @@ public class EditTopics extends AppCompatActivity {
 
             builder.setMultiChoiceItems(user_viewable_offered.toArray(new String[0]), bool1, (dialog, which, isChecked) -> {
                bool1[which] = isChecked;
+               Log.d(TAG, String.valueOf(which));
             });
 
             builder.setPositiveButton(R.string.remove, (dialog, which) -> {
                 for(int i = 0; i<bool1.length; i++){
-                    db.collection("Tutors").document(usr.getUid()).collection("profile_topics").document(topic_ids.get(i)).update("offered", false);
+                    if(bool1[i]){
+                        db.collection("Tutors").document(usr.getUid()).collection("profile_topics").document(offered_ids.get(i)).update("offered", false);
+                    }
                 }
                 recreate();
             });
@@ -186,9 +199,17 @@ public class EditTopics extends AppCompatActivity {
     }
 
     public void AddTopic(Editable name, Editable exp_yr, Editable exp_desc){
-        Topic newTopic = new Topic(name.toString(), exp_desc.toString(), Integer.parseInt(exp_yr.toString()), false);
-        db.collection("Tutors").document(usr.getUid()).collection("profile_topics").add(newTopic);
-        recreate();
+        if(topic_list.size() == 20){
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditTopics.this);
+            builder.setTitle("Error adding topic.");
+            builder.setMessage("Topic not added: " +  name.toString() + "Reason: Max Amount of Profile Topics Reached");
+            builder.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
+        }
+        else{
+            Topic newTopic = new Topic(name.toString(), exp_desc.toString(), Integer.parseInt(exp_yr.toString()), false);
+            db.collection("Tutors").document(usr.getUid()).collection("profile_topics").add(newTopic);
+            recreate();
+        }
     }
 
 

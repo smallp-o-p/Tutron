@@ -73,7 +73,7 @@ public class tutor_register extends AppCompatActivity {
                 return;
             }
 
-            Tutor newTutor = new Tutor(extras.get("firstname").toString(), extras.get("lastname").toString(), lang, educ, desc, false, null, empty, empty);
+            Tutor newTutor = new Tutor(extras.get("firstname").toString(), extras.get("lastname").toString(), lang, educ, desc, false, null, -1, 15.50);
 
             mAuth.createUserWithEmailAndPassword(extras.getString("email"), extras.getString("password"))
                     .addOnCompleteListener(this, task -> {

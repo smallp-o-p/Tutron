@@ -1,26 +1,17 @@
 package com.example.tutron;
 
-import static android.content.ContentValues.TAG;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.text.InputType;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
@@ -111,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
         edit.setOnClickListener(v -> {
             if(type.equals("Student")){
-                ;
             }
             if(type.equals("Tutor")){
                 Intent TutorIntent = new Intent(MainActivity.this, TutorProfile.class);

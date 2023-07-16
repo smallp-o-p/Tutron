@@ -28,7 +28,7 @@
         android:background="@android:drawable/editbox_background"
         android:drawablePadding="16dp"
         android:gravity="center"
-        android:hint="@string/remove_profile_topics"
+        android:hint="@string/remove_topic_add_to_offered"
         android:padding="12dp"
         android:textSize="16sp"
         app:drawableRightCompat="@android:drawable/arrow_down_float"
@@ -84,15 +84,4 @@
         app:layout_constraintTop_toBottomOf="@+id/offered_topics_dropdown"
         app:layout_constraintVertical_bias="0.212" />
 
-    <Button
-        android:id="@+id/add_offered_topic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#125379"
-        android:text="@string/add_offered_topics"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_profile_topic"
-        app:layout_constraintVertical_bias="0.35" />
 </androidx.constraintlayout.widget.ConstraintLayout>
