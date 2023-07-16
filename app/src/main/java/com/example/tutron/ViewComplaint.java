@@ -15,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,6 +33,8 @@ public class ViewComplaint extends AppCompatActivity {
     DatePickerDialog datepicker;
 
     String docid;
+
+    ArrayList<Complaint> complaints = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +68,8 @@ public class ViewComplaint extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if(document.exists()){
                             Log.d(TAG, document.getData().toString());
-                            desc.append(" " + document.getString("complaintDesc"));
-                            tutorid = document.getString("TutorID");
+                            desc.append(" " + document.toObject(Complaint.class).getComplaintDesc());
+                            tutorid = document.toObject(Complaint.class).getTutorID();
                             getTutorName(docid);
                             setDatePicker(tutorid);
                         }
@@ -72,22 +77,20 @@ public class ViewComplaint extends AppCompatActivity {
                 });
 
         suspend_temp.setOnClickListener(v -> {
-            Log.d(TAG, tutorid);
             datepicker.show();
         });
 
         suspend_perm.setOnClickListener(v -> {
-            Log.d(TAG, tutorid);
-            db.collection("Complaints").document(docid).update("Completed", true);
-            db.collection("Complaints").document(docid).update("Decision", "Suspended (Permanent)");
+            db.collection("Complaints").document(docid).update("completed", true);
+            db.collection("Complaints").document(docid).update("decision", "Suspended (Permanent)");
             db.collection("Tutors").document(tutorid).update("Suspended", true);
             finish();
         });
 
         dismiss.setOnClickListener(v -> {
             Log.d(TAG, tutorid);
-            db.collection("Complaints").document(docid).update("Completed", true);
-            db.collection("Complaints").document(docid).update("Decision", "Dismissed");
+            db.collection("Complaints").document(docid).update("completed", true);
+            db.collection("Complaints").document(docid).update("decision", "Dismissed");
             finish();
         });
 
@@ -102,10 +105,10 @@ public class ViewComplaint extends AppCompatActivity {
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             Date d = cal.getTime();
             Log.d(TAG, d.toString());
-            db.collection("Complaints").document(docid).update("Completed", true);
+            db.collection("Complaints").document(docid).update("completed", true);
             db.collection("Complaints").document(docid).update("Decision", "Suspended (Temporary)");
             db.collection("Tutors").document(tutor_id).update("SuspendTime", d);
-            db.collection("Tutors").document(tutor_id).update("suspended", true);
+            db.collection("Tutors").document(tutor_id).update("Suspended", true);
             finish();
         };
         datepicker.setOnDateSetListener(DatePickerListener);
@@ -115,7 +118,7 @@ public class ViewComplaint extends AppCompatActivity {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){
-                    fullname.append(" " + document.getString("TutorFirstName") + " " + document.getString("TutorLastName"));
+                    fullname.append(" " + document.getString("tutorFirstName") + " " + document.getString("tutorLastName"));
                 }
             }
         });

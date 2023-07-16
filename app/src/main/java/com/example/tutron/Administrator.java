@@ -56,9 +56,8 @@ public class Administrator extends AppCompatActivity {
             });
         }
         logout_btn.setOnClickListener(v -> {
-            Intent gotologin = new Intent(Administrator.this, login_screen.class);
-            gotologin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(gotologin);
+            mAuth.signOut();
+            finish();
         });
     }
     public void GenerateComplaints(){ // populate the complaintlistview
@@ -67,7 +66,7 @@ public class Administrator extends AppCompatActivity {
         complaints.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    if(!document.getBoolean("Completed")){
+                    if(Boolean.FALSE.equals(document.getBoolean("completed"))){
                         list.add(document.getId());
                     }
                 }

@@ -9,12 +9,22 @@ public class Complaint{
     private String complaintDesc;
     private String tutorID;
 
+    public Complaint(){}
+
     public Complaint(String tutorID, String tutorFirstName, String tutorLastName, String description) {
         this.completed = false;
         this.decision = "";
         this.tutorFirstName = tutorFirstName;
         this.tutorLastName = tutorLastName;
         this.complaintDesc = description;
+        this.tutorID = tutorID;
+    }
+    public Complaint(boolean completed, String decision, String tutorFirstName, String tutorLastName, String complaintDesc, String tutorID) {
+        this.completed = completed;
+        this.decision = decision;
+        this.tutorFirstName = tutorFirstName;
+        this.tutorLastName = tutorLastName;
+        this.complaintDesc = complaintDesc;
         this.tutorID = tutorID;
     }
 
@@ -36,4 +46,11 @@ public class Complaint{
         this.complaintDesc = complaintDesc;
     }
 
+    public String getTutorID() {
+        return tutorID;
+    }
+
+    public void setTutorID(String tutorID) {
+        this.tutorID = tutorID;
+    }
 }

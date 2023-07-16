@@ -97,7 +97,6 @@ public class SubmitComplaint extends AppCompatActivity {
                         .addOnSuccessListener(querySnapshot1 -> {
                             ArrayList<String> names = new ArrayList<>();
                             ArrayList<Pair<String, String>> names_two = new ArrayList<>();
-                            Log.d(TAG, "This is a debug message");
                             for (QueryDocumentSnapshot document : querySnapshot1) {
                                 String tutor = document.getString("tutorID");
                                 tutors.add(tutor);
@@ -143,6 +142,8 @@ public class SubmitComplaint extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Complaint description is too long.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            Log.d(TAG, String.valueOf(tutorID));
 
             Complaint newComplaint = new Complaint(tutorID, firstName, lastName, desc);
             Toast.makeText(SubmitComplaint.this, "Complaint submitted.", Toast.LENGTH_SHORT).show();
