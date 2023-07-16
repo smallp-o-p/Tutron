@@ -2,8 +2,6 @@ package com.example.tutron;
 
 import android.media.Image;
 
-import java.util.List;
-
 public class Tutor {
 
     private String FirstName;
@@ -14,8 +12,9 @@ public class Tutor {
     private Image pfp;
     private boolean Suspended;
     private String SuspendTime;
-    private List<String> profile_topics;
-    private List<String> offered_topics;
+    private double rating;
+
+    private double hourly;
 
     public String getUUID() {
         return UUID;
@@ -29,7 +28,7 @@ public class Tutor {
 
     public Tutor(){}
 
-    public Tutor(String firstName, String lastName, String lang, String education, String description, Boolean suspended, String SuspendTime, List<String> profile_topics, List<String> offered_topics) {
+    public Tutor(String firstName, String lastName, String lang, String education, String description, Boolean suspended, String SuspendTime, double rating, double hourly) {
         this.FirstName = firstName;
         this.LastName = lastName;
         this.lang = lang;
@@ -37,8 +36,8 @@ public class Tutor {
         this.description = description;
         this.Suspended = suspended;
         this.SuspendTime = SuspendTime;
-        this.profile_topics = profile_topics;
-        this.offered_topics = offered_topics;
+        this.rating = rating;
+        this.hourly = hourly;
     }
     public void SetSuspended(){
         this.Suspended = true;
@@ -93,25 +92,4 @@ public class Tutor {
         return LastName;
     }
 
-    public List<String> getOffered_topics() {
-        return offered_topics;
-    }
-    public void setOffered_topics(List<String> offered_topics) {
-        this.offered_topics = offered_topics;
-    }
-    public void addOffered_topics(String topic){
-        this.offered_topics.add(topic);
-    }
-
-    public void addProfile_topics(String topic){
-        this.profile_topics.add(topic);
-    }
-
-    public List<String> getProfile_topics() {
-        return profile_topics;
-    }
-
-    public void setProfile_topics(List<String> profile_topics) {
-        this.profile_topics = profile_topics;
-    }
 }

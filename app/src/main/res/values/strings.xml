@@ -99,5 +99,10 @@
     <string name="rating">Rating:</string>
     <string name="request_a_lesson">Request a Lesson</string>
     <string name="education">Education:</string>
+    <string name="remove_topic_add_to_offered">Remove Topic/Add to Offered</string>
+    <string name="ratings_for">Ratings for:</string>
+    <string name="your_hourly_rating_tap_to_edit">Your Hourly Rating (Tap to Edit) :</string>
+    <string name="hourly_rate_tap_to_edit">Hourly Rate (Tap to Edit):</string>
+    <string name="proceed"> Proceed</string>
 
 </resources>

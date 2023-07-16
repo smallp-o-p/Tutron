@@ -3,15 +3,14 @@ package com.example.tutron;
 public class Topic {
     private String name;
     private int exp;
-    private String description;
-
+    private String desc;
     public boolean offered;
 
     public Topic(){}
     public Topic(String name, String description, int exp, boolean offered) {
         this.name = name;
         this.exp = exp;
-        this.description = description;
+        this.desc = description;
         this.offered = offered;
     }
     public String getName() {
@@ -29,11 +28,11 @@ public class Topic {
     }
 
     public String getDescription() {
-        return description;
+        return desc;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.desc = description;
     }
 
     public boolean isOffered() {

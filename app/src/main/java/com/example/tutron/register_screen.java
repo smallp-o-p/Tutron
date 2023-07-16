@@ -9,14 +9,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputEditText;
-
-import org.jetbrains.annotations.TestOnly;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class register_screen extends AppCompatActivity {
 
