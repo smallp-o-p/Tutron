@@ -98,7 +98,7 @@ public class tutor_register extends AppCompatActivity {
         db.collection("Users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).set(ouruser);
         db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).set(tutor);
         db.collection("Tutors").document(mAuth.getCurrentUser().getUid()).update("Suspended", false);
-        Intent intent = new Intent(tutor_register.this, login_screen.class);
+        Intent intent = new Intent(tutor_register.this, TutorScreen.class);
         intent.putExtra("user", mAuth.getCurrentUser());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
