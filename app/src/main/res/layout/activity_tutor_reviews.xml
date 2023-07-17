@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="@string/ratings_for"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         android:textSize="24sp"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/tutor_reviews_rating_list"
